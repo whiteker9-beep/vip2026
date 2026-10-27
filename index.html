@@ -1,0 +1,933 @@
+cat << 'EOF' > index.html
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KOREA: THE SHADOW & THE LIGHT</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'title': ['"Black Han Sans"', 'sans-serif'],
+                        'body': ['"Noto Sans KR"', 'sans-serif'],
+                    },
+                    colors: {
+                        demon: {
+                            purple: '#b026ff',
+                            red: '#ff0055',
+                            cyan: '#00f3ff',
+                            yellow: '#ffeb3b',
+                            green: '#00ff66',
+                            dark: '#0a0a0c',
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': 'linear-gradient(to right, #ffffff11 1px, transparent 1px), linear-gradient(to bottom, #ffffff11 1px, transparent 1px)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html, body {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            overflow-x: hidden;
+            background-color: #0a0a0c;
+            color: #ffffff;
+        }
+        
+        /* 한국 전통 문살 느낌의 패턴 배경 */
+        .bg-korean-pattern {
+            background-image: 
+                linear-gradient(to right, #ffffff08 1px, transparent 1px),
+                linear-gradient(to bottom, #ffffff08 1px, transparent 1px),
+                url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 40px 40px, 40px 40px, 80px 80px;
+        }
+
+        /* Glitch Effect */
+        .glitch-wrapper { position: relative; }
+        .glitch {
+            position: relative;
+            color: white;
+            letter-spacing: 0.1em;
+            text-shadow: 2px 0 #ff0055, -2px 0 #00f3ff;
+            animation: glitch-anim 2s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { text-shadow: 2px 0 #ff0055, -2px 0 #00f3ff; transform: translate(0); }
+            20% { text-shadow: -2px 0 #ff0055, 2px 0 #00f3ff; transform: translate(-1px, 1px); }
+            40% { text-shadow: 2px 0 #ff0055, -2px 0 #00f3ff; transform: translate(1px, -1px); }
+            60% { text-shadow: -2px 0 #ff0055, 2px 0 #00f3ff; transform: translate(-1px, 0); }
+            80% { text-shadow: 2px 0 #ff0055, -2px 0 #00f3ff; transform: translate(1px, 1px); }
+            100% { text-shadow: -2px 0 #ff0055, 2px 0 #00f3ff; transform: translate(0); }
+        }
+
+        /* Neon Borders & Glows */
+        .neon-box-purple { border: 2px solid #b026ff; box-shadow: 0 0 10px #b026ff44, inset 0 0 10px #b026ff44; transition: all 0.3s ease; }
+        .neon-box-purple:hover { box-shadow: 0 0 20px #b026ff88, inset 0 0 15px #b026ff88; transform: translateY(-3px); }
+
+        .neon-box-red { border: 2px solid #ff0055; box-shadow: 0 0 10px #ff005544, inset 0 0 10px #ff005544; transition: all 0.3s ease; }
+        .neon-box-red:hover { box-shadow: 0 0 20px #ff005588, inset 0 0 15px #ff005588; transform: translateY(-3px); }
+
+        .neon-box-yellow { border: 2px solid #ffeb3b; box-shadow: 0 0 10px #ffeb3b44, inset 0 0 10px #ffeb3b44; transition: all 0.3s ease; }
+        .neon-box-yellow:hover { box-shadow: 0 0 20px #ffeb3b88, inset 0 0 15px #ffeb3b88; transform: translateY(-3px); }
+
+        .neon-box-cyan { border: 2px solid #00f3ff; box-shadow: 0 0 10px #00f3ff44, inset 0 0 10px #00f3ff44; transition: all 0.3s ease; }
+        .neon-box-cyan:hover { box-shadow: 0 0 20px #00f3ff88, inset 0 0 15px #00f3ff88; transform: translateY(-3px); }
+
+        .neon-box-green { border: 2px solid #00ff66; box-shadow: 0 0 10px #00ff6644, inset 0 0 10px #00ff6644; transition: all 0.3s ease; }
+        .neon-box-green:hover { box-shadow: 0 0 20px #00ff6688, inset 0 0 15px #00ff6688; transform: translateY(-3px); }
+
+        .neon-box-white { border: 2px solid #ffffff; box-shadow: 0 0 10px #ffffff44, inset 0 0 10px #ffffff44; transition: all 0.3s ease; }
+
+        /* Reveal Animation */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Hide Scrollbar for Mobile Nav */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Language Toggle Utility */
+        body:not(.lang-ko) .show-ko { display: none !important; }
+        body.lang-ko .show-en { display: none !important; }
+
+        /* 이미지 플레이스홀더 스타일 */
+        .img-placeholder {
+            width: 100%;
+            height: 160px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px dashed rgba(255, 255, 255, 0.25);
+            position: relative;
+        }
+        .img-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.85;
+            transition: opacity 0.3s ease;
+        }
+        .img-placeholder:hover img {
+            opacity: 1;
+        }
+        .img-label {
+            position: absolute;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.7);
+            z-index: 10;
+            pointer-events: none;
+            background: rgba(0,0,0,0.7);
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body class="font-body antialiased bg-korean-pattern bg-demon-dark relative">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-black/90 backdrop-blur-md border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between h-auto sm:h-16 py-3 sm:py-0">
+                <div class="flex items-center justify-between w-full sm:w-auto mb-3 sm:mb-0">
+                    <div class="flex-shrink-0 font-title text-2xl tracking-widest cursor-pointer" onclick="window.scrollTo(0,0)">
+                        <span class="text-demon-cyan">K-</span><span class="text-demon-red">HUNTERS</span>
+                    </div>
+                    <!-- Language Toggle Button (Mobile Top Right) -->
+                    <button onclick="toggleLanguage()" class="sm:hidden px-3 py-1 border border-white/50 text-white rounded hover:border-demon-cyan hover:text-demon-cyan transition-colors font-mono text-xs flex items-center">
+                        <i class="fas fa-globe mr-2"></i><span class="lang-text">KOR</span>
+                    </button>
+                </div>
+                
+                <!-- Nav Links -->
+                <div class="w-full sm:w-auto flex overflow-x-auto hide-scrollbar space-x-6 pb-2 sm:pb-0 text-sm sm:text-base">
+                    <a href="#spirit" class="flex-shrink-0 hover:text-demon-purple transition-colors font-bold tracking-wider">01. <span class="show-en">SOUL</span><span class="show-ko">영혼</span></a>
+                    <a href="#alchemy" class="flex-shrink-0 hover:text-demon-red transition-colors font-bold tracking-wider">02. <span class="show-en">ALCHEMY</span><span class="show-ko">연금술</span></a>
+                    <a href="#vanguard" class="flex-shrink-0 hover:text-demon-yellow transition-colors font-bold tracking-wider">03. <span class="show-en">VANGUARD</span><span class="show-ko">선봉대</span></a>
+                    <a href="#elixir" class="flex-shrink-0 hover:text-demon-cyan transition-colors font-bold tracking-wider">04. <span class="show-en">ELIXIR</span><span class="show-ko">영약</span></a>
+                    <a href="#shield" class="flex-shrink-0 hover:text-white transition-colors font-bold tracking-wider">05. <span class="show-en">SHIELD</span><span class="show-ko">방어막</span></a>
+                </div>
+
+                <!-- Language Toggle Button (Desktop) -->
+                <button onclick="toggleLanguage()" class="hidden sm:flex ml-4 px-4 py-1 border border-white/50 text-white rounded hover:border-demon-cyan hover:text-demon-cyan transition-colors font-mono text-sm items-center flex-shrink-0">
+                    <i class="fas fa-globe mr-2"></i><span class="lang-text">KOR</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header / Hero Section -->
+    <header class="min-h-[90vh] flex items-center justify-center relative overflow-hidden pt-20">
+        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-demon-purple/20 via-demon-dark to-demon-dark z-0"></div>
+        <div class="z-10 text-center px-4 w-full">
+            <div class="glitch-wrapper mb-6">
+                <h1 class="glitch font-title text-5xl sm:text-7xl md:text-8xl lg:text-9xl leading-tight">SEOUL<br>NIGHTMARE</h1>
+            </div>
+            <p class="text-sm sm:text-xl md:text-2xl font-light tracking-widest text-gray-400 mb-8 uppercase px-2">
+                <span class="show-en">A Field Guide for Foreign Agents</span>
+                <span class="show-ko">외국인 요원을 위한 현장 가이드</span>
+            </p>
+            <div class="flex justify-center gap-3 sm:gap-4 flex-wrap">
+                <div class="px-4 py-2 border border-demon-cyan text-demon-cyan rounded-full animate-pulse text-xs sm:text-sm font-bold">
+                    <span class="show-en">SYSTEM ONLINE</span><span class="show-ko">시스템 온라인</span>
+                </div>
+                <div class="px-4 py-2 border border-demon-red text-demon-red rounded-full animate-pulse text-xs sm:text-sm font-bold">
+                    <span class="show-en">THREAT LEVEL: UNKNOWN</span><span class="show-ko">위협 등급: 측정 불가</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 01. SPIRIT SECTION -->
+    <section id="spirit" class="min-h-screen py-20 relative flex items-center border-t border-demon-purple/30">
+        <div class="absolute inset-0 bg-gradient-to-b from-demon-dark via-[#1a0a1c] to-demon-dark opacity-80"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full reveal">
+            
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="font-title text-4xl sm:text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-demon-purple to-pink-500 mb-4 drop-shadow-[0_0_10px_rgba(176,38,255,0.8)]">
+                    <span class="show-en">SOUL GUIDE</span><span class="show-ko">영혼 인도자</span>
+                </h2>
+                <h3 class="text-lg sm:text-2xl text-gray-300 font-bold tracking-widest">
+                    <span class="show-en">Reapers, Shamanism & Spiritual Firewalls</span>
+                    <span class="show-ko">[실제] 저승사자, 무당, 그리고 부적</span>
+                </h3>
+                <p class="mt-4 text-gray-400 max-w-4xl mx-auto text-sm sm:text-lg px-2">
+                    <span class="show-en">The Korean spiritual realm is heavily bureaucratized and deeply rooted in daily life. From ancient psychopomps to modern-day spiritual brokers, the veil between the living and the dead is meticulously managed.</span>
+                    <span class="show-ko">한국의 영적 세계는 매우 체계적이며 일상에 깊이 뿌리내리고 있습니다. 고대의 영혼 인도자부터 현대의 영적 브로커(무당)까지, 산 자와 죽은 자의 경계는 철저하게 관리됩니다.</span>
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-stretch mb-12">
+                <!-- Jeoseungsaja -->
+                <div class="neon-box-purple p-5 sm:p-6 rounded-xl bg-black/60 relative group flex flex-col justify-between border-t-4 border-t-demon-purple">
+                    <div>
+                        <div class="absolute top-0 right-0 bg-demon-dark text-demon-purple border border-demon-purple/50 text-[10px] sm:text-xs font-bold px-2 py-1 rounded-bl-lg font-mono z-20">CLASS: REAPER</div>
+                        <i class="fas fa-user-secret text-4xl text-demon-purple mb-4 drop-shadow-[0_0_8px_#b026ff]"></i>
+                        <h4 class="font-bold text-xl sm:text-2xl text-white mb-2 font-title">
+                            <span class="show-en">JEOSEUNGSAJA</span><span class="show-ko">저승사자</span>
+                        </h4>
+
+                        <!-- 📸 이미지 공간 -->
+                        <div class="img-placeholder">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiURMVZ9lTEVwqcA4NETuQwc8-KoipGKHFvcKVPNmHvPTJOmMYVmtmRDquQL9dBHjy4XV6RqZc5TJoZpAcFb956CXkFF5MexD-JQQZ14W9fMV1EUGsUQCFEPOBR5V5ncGzZU0assYMbz666HC1Wg995tQHDykyoKzZheXLCg3BpUd2M_Hk87JTDl7S0SsHo/s320/%EC%A0%80%EC%8A%B9%EC%82%AC%EC%9E%90.png" alt="Jeoseungsaja">
+                        </div>
+
+                        <p class="text-xs sm:text-sm text-gray-300 mb-4 leading-relaxed">
+                            <span class="show-en"><strong>[Reality]</strong> Traditional Korean grim reapers. Historically depicted with pale faces, black Hanbok, and a wide-brimmed Gat (hat). Modern media often portrays them as sleek, pale men in tailored black suits or coats.</span>
+                            <span class="show-ko"><strong>[실제]</strong> 한국의 전통적인 저승사자. 과거에는 창백한 얼굴에 검은 도포와 갓을 쓴 모습이었으나, 현대 미디어(드라마 '도깨비' 등)에서는 세련된 검은 정장이나 코트를 입은 모습으로 묘사됩니다.</span>
+                        </p>
+                    </div>
+                    <div class="mt-4 p-3 sm:p-4 bg-purple-900/20 border border-purple-500/30 rounded-lg">
+                        <p class="text-demon-purple font-mono font-bold text-xs sm:text-sm mb-2"><i class="fas fa-skull mr-2"></i>AGENT NOTE</p>
+                        <p class="text-[10px] sm:text-xs text-gray-400">
+                            <span class="show-en">Official bureaucratic entities of the Underworld. If you see a pale entity in a flawless black suit holding a list, evade immediately. <strong>DO NOT</strong> answer if they call your name three times.</span>
+                            <span class="show-ko">명계의 공식 관료 개체입니다. 흠잡을 데 없는 검은 정장을 입고 명부를 든 창백한 개체를 발견하면 즉시 회피하십시오. 그들이 당신의 이름을 세 번 부를 때 절대 대답해서는 안 됩니다.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Mudang & Gut -->
+                <div class="neon-box-purple p-5 sm:p-6 rounded-xl bg-black/60 relative group flex flex-col justify-between border-t-4 border-t-pink-500">
+                    <div>
+                        <div class="absolute top-0 right-0 bg-demon-dark text-pink-400 border border-pink-500/50 text-[10px] sm:text-xs font-bold px-2 py-1 rounded-bl-lg font-mono z-20">CLASS: BROKER</div>
+                        <i class="fas fa-fan text-4xl text-pink-400 mb-4 drop-shadow-[0_0_8px_#ff0055]"></i>
+                        <h4 class="font-bold text-xl sm:text-2xl text-white mb-2 font-title">
+                            <span class="show-en">MUDANG & GUT</span><span class="show-ko">무당과 굿</span>
+                        </h4>
+
+                        <!-- 📸 이미지 공간 -->
+                        <div class="img-placeholder">
+                            <!-- <span class="img-label">[IMAGE: 무당 굿 / Mudang Ritual]</span> -->
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgK4_RKWXs9I8EWVTMAH1R-nw8Vs_nNBZ2rjh0Vb6eyI1aB8lxU2u1QZrVkNIJ7RcFENTT8adfGdqu5MtQVXAKNuCSFIgQwhp_o85HZPnOhuDI9yu3itiw5uYAyJEI8THAKqf8aO_CREOVknemsvlQiMS3PlJPv4r8J-KZAPh70hCe-lFjgRKMcungxRktV/s320/%EB%AC%B4%EB%8B%B9.png" alt="Mudang">
+                        </div>
+
+                        <p class="text-xs sm:text-sm text-gray-300 mb-4 leading-relaxed">
+                            <span class="show-en"><strong>[Reality]</strong> 'Mudang' are shamans who act as intermediaries between spirits and humans. They perform 'Gut', a dynamic, hours-long ritual involving ecstatic dancing, intense drumming, and trance states to appease angry spirits or invite fortune.</span>
+                            <span class="show-ko"><strong>[실제]</strong> '무당'은 신령과 인간 사이를 연결하는 영적 매개자입니다. 징, 꽹과리 등 타악기의 격렬한 리듬에 맞춰 춤을 추고 접신(Trance)하여 억울한 영혼을 달래거나 복을 기원하는 의식인 '굿'을 주관합니다.</span>
+                        </p>
+                    </div>
+                    <div class="mt-4 p-3 sm:p-4 bg-pink-900/20 border border-pink-500/30 rounded-lg">
+                        <p class="text-pink-400 font-mono font-bold text-xs sm:text-sm mb-2"><i class="fas fa-satellite-dish mr-2"></i>AGENT NOTE</p>
+                        <p class="text-[10px] sm:text-xs text-gray-400">
+                            <span class="show-en">High-tier Spiritual Hackers. A 'Gut' is a massive acoustic resonance attack to forcefully banish malicious entities or open dimensional rifts. Do not interrupt their frequency broadcast.</span>
+                            <span class="show-ko">최고 등급의 영적 해커. '굿'은 강력한 음향 공명을 통해 악귀를 강제 퇴거시키거나 차원의 문을 여는 대규모 의식입니다. 이들의 주파수 송출을 방해하지 마십시오.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Bujeok -->
+                <div class="neon-box-purple p-5 sm:p-6 rounded-xl bg-black/60 relative group flex flex-col justify-between border-t-4 border-t-demon-cyan">
+                    <div>
+                        <div class="absolute top-0 right-0 bg-demon-dark text-demon-cyan border border-demon-cyan/50 text-[10px] sm:text-xs font-bold px-2 py-1 rounded-bl-lg font-mono z-20">ITEM: FIREWALL</div>
+                        <i class="fas fa-scroll text-4xl text-demon-cyan mb-4 drop-shadow-[0_0_8px_#00f3ff]"></i>
+                        <h4 class="font-bold text-xl sm:text-2xl text-white mb-2 font-title">
+                            <span class="show-en">BUJEOK</span><span class="show-ko">부적 (결계 코드)</span>
+                        </h4>
+
+                        <!-- 📸 이미지 공간 -->
+                        <div class="img-placeholder">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhVpOjeKQ4zcianfXPWaCzMz-b9-HGBg5lgvWPoUVaz6k7OTrrkfWV-IYv4dg5dtVIhRWj3u37YFieAXThjr0m_7Qg4uaEml_VXVHDfjSOJreQyQsn5IECoavwAIScPR0zk9tsJKdB_7lLjRIW2gM2Nb7qpD9FObcclsJw8JPmSUao8znPejQikqtYqkTyF/s320/%EB%B6%80%EC%A0%81.png" alt="Bujeok">
+                        </div>
+
+                        <p class="text-xs sm:text-sm text-gray-300 mb-4 leading-relaxed">
+                            <span class="show-en"><strong>[Reality]</strong> Talismans made of yellow paper inscribed with complex, ancient symbols using red cinnabar ink. They are pasted above doors or carried in wallets to ward off evil spirits, illness, or bad luck.</span>
+                            <span class="show-ko"><strong>[실제]</strong> 노란 한지 위에 붉은 주사(진사)로 복잡한 고대 기호나 문자를 그린 부적. 문설주 위에 붙이거나 지갑 속에 부적을 지니고 다니며 질병, 액운, 악귀를 막아냅니다.</span>
+                        </p>
+                    </div>
+                    <div class="mt-4 p-3 sm:p-4 bg-cyan-900/20 border border-cyan-500/30 rounded-lg">
+                        <p class="text-demon-cyan font-mono font-bold text-xs sm:text-sm mb-2"><i class="fas fa-shield-alt mr-2"></i>AGENT NOTE</p>
+                        <p class="text-[10px] sm:text-xs text-gray-400">
+                            <span class="show-en">Physical deployment of portable firewall protocols. The red ink contains specific frequencies that block unauthorized spiritual intrusions. A door with this is a confirmed Safe Zone.</span>
+                            <span class="show-ko">휴대용 방화벽 프로토콜의 물리적 인스턴스. 붉은 안료는 비인가 영적 침입을 물리적으로 차단하는 파장을 지닙니다. 이것이 부착된 문 안쪽은 안전 지대로 간주하십시오.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 02. ALCHEMY SECTION -->
+    <section id="alchemy" class="min-h-screen py-20 relative flex items-center border-t border-demon-red/30">
+        <div class="absolute inset-0 bg-gradient-to-b from-demon-dark via-[#2e0b11] to-demon-dark opacity-80"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full reveal">
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="font-title text-4xl sm:text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-demon-red to-orange-500 mb-4 drop-shadow-[0_0_10px_rgba(255,0,85,0.8)]">
+                    <span class="show-en">ALCHEMY OF LIFE</span><span class="show-ko">생명의 연금술</span>
+                </h2>
+                <h3 class="text-lg sm:text-2xl text-gray-300 font-bold tracking-widest">
+                    <span class="show-en">Kimchi Vectors, Onggi & Botanical Archives</span>
+                    <span class="show-ko">[실제] 방대한 김치의 세계, 옹기, 그리고 약식동원</span>
+                </h3>
+                <p class="mt-4 text-gray-400 max-w-4xl mx-auto text-sm sm:text-lg px-2 leading-relaxed">
+                    <span class="show-en">'Kimchi' is not a single dish, but a vast class of fermented biomatter. The base requires an intricate alchemy of salted seafood (Jeotgal), garlic, chili, and pureed fruits (apple, pear) to trigger enzymatic breakdown and infinite preservation.</span>
+                    <span class="show-ko">'김치'는 단일 요리가 아닌 방대한 발효 시스템입니다. 감칠맛을 폭발시키는 다양한 젓갈, 마늘, 고춧가루, 그리고 자연스러운 단맛과 효소 작용을 촉진하는 과일(사과, 배 등)을 갈아 넣어 무한한 보존성을 지닌 결정체로 연성합니다.</span>
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-16">
+                <!-- Variation Matrix -->
+                <div class="neon-box-red p-5 sm:p-6 rounded-xl bg-black/60 relative border-l-4 border-l-demon-red flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-lg sm:text-xl text-demon-red border-b border-demon-red/30 pb-2 mb-4 font-title flex items-center">
+                            <i class="fas fa-sitemap mr-2"></i><span class="show-en">VARIATION MATRIX</span><span class="show-ko">변형 매트릭스</span>
+                        </h4>
+
+                        <!-- 📸 이미지 공간 -->
+                        <div class="img-placeholder">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh5u8CICpxrNpt-s0FGimPSfd17EHLM5632OcCQaiBEvjTnZCOd7gsWREQ-xUtLWjEwq6fq0H5U2fBPs1lMvcb-CBgdPqyrX7uMhA1QPipaQOIzEucrshtaF1l49XOs2l6WbyY2dvjj5uTnLVVBcc0hUg_jQ4wf0cZW1ojgBwbPxj8biqYqOXtKB3wQpL-K/s320/%EA%B9%80%EC%B9%98.png" alt="Kimchi Matrix">
+                        </div>
+
+                        <ul class="space-y-4 text-gray-300 text-xs sm:text-sm">
+                            <li class="flex items-start">
+                                <i class="fas fa-caret-right text-demon-red mt-1 mr-2 flex-shrink-0"></i>
+                                <div>
+                                    <strong class="text-white"><span class="show-en">Pa-kimchi</span><span class="show-ko">파김치 (Green Onion):</span></strong> 
+                                    <span class="show-en">Highly pungent. Pairs flawlessly with roasted pork.</span><span class="show-ko">알싸하고 매콤한 파 베이스. 삼겹살/짜파게티와의 궁합이 치명적입니다.</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-caret-right text-demon-red mt-1 mr-2 flex-shrink-0"></i>
+                                <div>
+                                    <strong class="text-white"><span class="show-en">Kkakdugi</span><span class="show-ko">깍두기 (Cubed Radish):</span></strong> 
+                                    <span class="show-en">Crunchy cubes. The absolute mandatory companion for bone soups (Seolleongtang).</span><span class="show-ko">아삭하게 씹히는 무 큐브. 설렁탕, 국밥 등 국물 요리의 절대적인 동반자입니다.</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-caret-right text-demon-red mt-1 mr-2 flex-shrink-0"></i>
+                                <div>
+                                    <strong class="text-white"><span class="show-en">Gat-kimchi</span><span class="show-ko">갓김치 (Mustard Leaf):</span></strong> 
+                                    <span class="show-en">Offers a unique, sharp, and slightly bitter kinetic kick.</span><span class="show-ko">돌산 갓을 사용하여 특유의 톡 쏘는 맛과 쌉싸름한 맛이 뇌를 자극합니다.</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-caret-right text-demon-red mt-1 mr-2 flex-shrink-0"></i>
+                                <div>
+                                    <strong class="text-white"><span class="show-en">Mul-kimchi</span><span class="show-ko">물김치 (Water Radish):</span></strong> 
+                                    <span class="show-en">Non-spicy, cold broth version. Acts as a cooling agent against heavy spices.</span><span class="show-ko">매운맛이 없는 차가운 국물 변형. 화기를 진정시키는 쿨링 포션 역할을 합니다.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Thermal Processing -->
+                <div class="neon-box-red p-5 sm:p-6 rounded-xl bg-black/60 relative border-l-4 border-l-orange-500 flex flex-col justify-between">
+                    <div>
+                        <h4 class="font-bold text-lg sm:text-xl text-orange-500 border-b border-orange-500/30 pb-2 mb-4 font-title flex items-center">
+                            <i class="fas fa-fire-burner mr-2"></i><span class="show-en">THERMAL PROCESSING</span><span class="show-ko">열처리 (조리 응용)</span>
+                        </h4>
+
+                        <!-- 📸 이미지 공간 -->
+                        <div class="img-placeholder">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhHYm-hYZTXoPI2mBn32TLBfBzDZ4KZQXX4pM8bOC0SyyBMB0oV4i7wh-Hoo02r3jMq_lGNJygz0TxYWMnr4FGOVCPjmdfXIuKUb9hcRNsA0LpnR3ShG9Enbqw2R7dOGHw4-UcMyDFF9eKmjcVgLcqLMFLEoDK-0KR63EcmsB7DMes4nbAQd0Za3yna7UVo/s320/%EA%B9%80%EC%B9%98%EC%9A%94%EB%A6%AC.png" alt="Thermal Processing">
+                        </div>
+
+                        <p class="text-gray-400 mb-4 text-[11px] sm:text-xs">
+                            <span class="show-en">Aged Kimchi (Mugeunji) unlocks entirely new flavor profiles under extreme heat.</span>
+                            <span class="show-ko">장기간 숙성된 김치(묵은지)는 불과 만났을 때 감칠맛의 한계를 돌파합니다.</span>
+                        </p>
+                        <div class="grid grid-cols-1 gap-3 sm:gap-4">
+                            <div class="bg-red-900/20 p-2 sm:p-3 border border-red-500/30 rounded flex justify-between items-center">
+                                <div>
+                                    <strong class="text-white block text-sm"><span class="show-en">Jjigae (Stew)</span><span class="show-ko">김치찌개</span></strong>
+                                    <span class="text-[10px] text-gray-400"><span class="show-en">Boiled with pork belly or tuna.</span><span class="show-ko">돼지고기나 참치를 넣고 끓인 궁극의 소울푸드.</span></span>
+                                </div>
+                                <i class="fas fa-hot-tub text-orange-500"></i>
+                            </div>
+                            <div class="bg-red-900/20 p-2 sm:p-3 border border-red-500/30 rounded flex justify-between items-center">
+                                <div>
+                                    <strong class="text-white block text-sm"><span class="show-en">Bokkeumbap</span><span class="show-ko">김치볶음밥</span></strong>
+                                    <span class="text-[10px] text-gray-400"><span class="show-en">Stir-fried with rice and a fried egg on top.</span><span class="show-ko">기름에 볶은 밥 위에 계란 프라이를 얹은 전투식량.</span></span>
+                                </div>
+                                <i class="fas fa-fire text-orange-500"></i>
+                            </div>
+                            <div class="bg-red-900/20 p-2 sm:p-3 border border-red-500/30 rounded flex justify-between items-center">
+                                <div>
+                                    <strong class="text-white block text-sm"><span class="show-en">Jjim (Braised)</span><span class="show-ko">김치찜</span></strong>
+                                    <span class="text-[10px] text-gray-400"><span class="show-en">Slow-cooked whole chunks with rich meats.</span><span class="show-ko">포기김치와 두툼한 고기를 오랜 시간 부드럽게 쪄냄.</span></span>
+                                </div>
+                                <i class="fas fa-temperature-arrow-up text-orange-500"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Onggi (Clay Pots) -->
+                <div class="neon-box-red p-5 sm:p-6 rounded-xl bg-black/60 relative border-l-4 border-l-yellow-600 flex flex-col justify-between">
+                    <div>
+                        <div class="absolute top-0 right-0 bg-yellow-700 text-white text-[10px] sm:text-xs font-bold px-2 py-1 rounded-bl-lg font-mono z-20">CONTAINMENT</div>
+                        <h4 class="font-bold text-lg sm:text-xl text-yellow-500 border-b border-yellow-600/30 pb-2 mb-4 font-title flex items-center">
+                            <i class="fas fa-cubes-stacked mr-2"></i><span class="show-en">ONGGI (CLAY POTS)</span><span class="show-ko">옹기 (숨쉬는 항아리)</span>
+                        </h4>
+
+                        <!-- 📸 이미지 공간 -->
+                        <div class="img-placeholder">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhYty547lLIVkSgzGmXZ2nOfBpa-9mH4GfFSca5xvBYcRJGsCOQRzRMUUWHqYDFTgcVYqYOIbM4D3yZG4WU5gVcFcNfayszF1kC3faAe851CDgH3SctmcKCMZqy1ixdQnyrBe_ChHNYwbAq1SZaf0GbS3vWkPHlBKZYd2mnF0MRoBygNsP67ly9FBpe5bWg/s320/%EB%82%98%EB%AC%BC.png" alt="Onggi">
+                        </div>
+
+                        <p class="text-xs sm:text-sm text-gray-300 mb-4 leading-relaxed">
+                            <span class="show-en"><strong>[Reality]</strong> Traditional earthenware pots used for fermenting Kimchi, Gochujang, and Soy Sauce. They have microscopic pores that allow the pot to "breathe"—letting air in while keeping water out, creating the perfect microbial environment. (Modernized into 'Kimchi Refrigerators').</span>
+                            <span class="show-ko"><strong>[실제]</strong> 김치, 고추장, 간장 등을 발효시키는 전통 도기입니다. 표면에 미세한 구멍이 있어 공기는 통과시키고 물은 막아주는 '숨쉬는' 특성을 지녀 최적의 발효 환경을 조성합니다. (현대에는 '김치 냉장고'로 진화했습니다.)</span>
+                        </p>
+                    </div>
+                    <div class="mt-auto p-3 bg-yellow-900/20 border border-yellow-600/30 rounded-lg">
+                        <p class="text-yellow-500 font-mono font-bold text-[10px] sm:text-xs mb-1">AGENT NOTE</p>
+                        <p class="text-[10px] text-gray-400">
+                            <span class="show-en">Biological containment units. Do not breach. They house concentrated bacterial cultures vital to the nation's energy grid.</span>
+                            <span class="show-ko">생화학 보존 유닛입니다. 함부로 파괴하지 마십시오. 국가 에너지망에 필수적인 고농축 발효 에너지가 봉인되어 있습니다.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botanical Archives -->
+            <div class="border-t border-demon-red/30 pt-10 sm:pt-12">
+                <div class="text-center mb-8 sm:mb-10">
+                    <h3 class="text-2xl sm:text-3xl text-demon-green font-bold tracking-widest font-title mb-2 drop-shadow-[0_0_8px_#00ff66]">
+                        <i class="fas fa-leaf mr-2"></i><span class="show-en">BOTANICAL ARCHIVES</span><span class="show-ko">식물성 데이터베이스</span>
+                    </h3>
+                    <p class="text-xs sm:text-sm text-gray-400"><span class="show-en">Namul (Wild Herbs) & Yakjae (Medicinal Roots)</span><span class="show-ko">나물(채집 식물) & 약재(약용 식물)</span></p>
+                </div>
+
+                <!-- 좌우 높이를 일치시키기 위해 items-stretch 적용 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-stretch">
+                    
+                    <!-- Namul Archive -->
+                    <div class="flex flex-col group h-full">
+                        <!-- 📸 이미지 영역: 고정 높이 + absolute를 주어 여백 없이 꽉 채움 -->
+                        <div class="h-56 sm:h-64 rounded-t-xl border-2 border-demon-green/50 bg-[#051108] relative overflow-hidden flex-shrink-0">
+                            <img class="w-full h-full object-cover block" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgIom5ngr-Gdpc-2iBsMQlYWpzo9ei2yjfuge4u1RVUEl5ziv0bHgCJkD0Z24HR88ccQ7_JHMz6APv4YnDPXVzqaUIXvHEdp30wvwBXl-Q-s2ajk3bxA43pSowe1QoDtDnjvTYioc0LA8smWLb1Krv6fX4hVLJtTFtCY_mjspl_4TsvhFQ-Td8raUPaOTg4/s320/%EB%82%98%EB%AC%BC1.png" alt="Namul">
+                            <div class="absolute bottom-3 left-4 text-demon-green font-mono font-bold text-[10px] sm:text-xs bg-black/80 px-2 py-1 border border-demon-green/30 z-10 pointer-events-none">FILE: NAMUL.DAT</div>
+                        </div>
+
+                        <!-- 📝 하단 설명 박스: flex-1을 주어 양쪽 박스 높이를 균일하게 맞춤 -->
+                        <div class="flex-1 bg-black/60 border-2 border-t-0 border-demon-green/50 rounded-b-xl p-4 sm:p-5 shadow-[0_0_15px_rgba(0,255,102,0.1)] flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-base sm:text-lg text-white mb-2"><span class="show-en">Namul (Foraged Greens)</span><span class="show-ko">다양한 나물 문화</span></h4>
+                                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+                                    <span class="show-en">Korea has a highly developed culture of foraging wild greens (Gosari, Doraji, Chwinamul). These are meticulously blanched, dried, and seasoned with sesame oil or soy sauce, transforming bitter weeds into savory side dishes. Over 300 varieties are consumed.</span>
+                                    <span class="show-ko">고사리, 도라지, 취나물 등 산과 들에서 채취한 수백 종의 식물을 활용하는 문화입니다. 독성을 빼기 위해 데치고 말린 후, 참기름과 국간장으로 무쳐내어 잡초의 쓴맛을 깊은 감칠맛으로 승화시킵니다.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Yakjae Archive -->
+                    <div class="flex flex-col group h-full">
+                        <!-- 📸 이미지 영역: 고정 높이 + absolute를 주어 여백 없이 꽉 채움 -->
+                        <div class="h-56 sm:h-64 rounded-t-xl border-2 border-purple-500/50 bg-[#0d0511] relative overflow-hidden flex-shrink-0">
+                            <img class="w-full h-full object-cover block" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgUkyV_R4AxzuzEMCo6poVg598EQWJuEbKQOgLamUzIJ_1wX58OysoT__zLKq5WFqfg8g7TD7FrDQh3gtfbmcH6zfgrDmwgCUTm2arTgm4rTYE4TcWl0xnd5gNK0-_cSpUr8LVr1uCGM5EsOv2jU3dM6nq0O-y066PynYTbZOi78VHW-kbaex2LG9N4P-j7/s320/%EC%95%BD%EC%9E%AC.png" alt="Yakjae">
+                            <div class="absolute bottom-3 left-4 text-purple-400 font-mono font-bold text-[10px] sm:text-xs bg-black/80 px-2 py-1 border border-purple-500/30 z-10 pointer-events-none">FILE: YAKJAE.DAT</div>
+                        </div>
+
+                        <!-- 📝 하단 설명 박스: flex-1을 주어 양쪽 박스 높이를 균일하게 맞춤 -->
+                        <div class="flex-1 bg-black/60 border-2 border-t-0 border-purple-500/50 rounded-b-xl p-4 sm:p-5 shadow-[0_0_15px_rgba(176,38,255,0.1)] flex flex-col justify-between">
+                            <div>
+                                <h4 class="font-bold text-base sm:text-lg text-white mb-2"><span class="show-en">Yakjae (Medicinal Ingredients)</span><span class="show-ko">약재 (약식동원)</span></h4>
+                                <p class="text-xs sm:text-sm text-gray-400 leading-relaxed">
+                                    <span class="show-en">Guided by the philosophy that "Food and Medicine share the same origin" (Yaksik Dongwon), ingredients like Ginseng, Jujube, Astragalus, and Angelica root are commonly boiled into everyday foods (like Samgyetang) for health buffs.</span>
+                                    <span class="show-ko">"약과 음식은 그 근원이 같다(약식동원)"는 철학 아래, 인삼, 대추, 황기, 당귀 등의 한약재가 요리에 적극 사용됩니다. 삼계탕 같은 국물 요리는 시민들의 체력과 마나를 회복시키는 궁극의 포션입니다.</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 03. VANGUARD SECTION -->
+    <section id="vanguard" class="min-h-screen py-20 relative flex items-center border-t border-demon-yellow/30">
+        <div class="absolute inset-0 bg-gradient-to-b from-demon-dark via-[#1a1a05] to-demon-dark opacity-80"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full reveal">
+            
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="font-title text-4xl sm:text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-demon-yellow to-green-500 mb-4 drop-shadow-[0_0_10px_rgba(255,235,59,0.8)]">
+                    <span class="show-en">THE VANGUARD</span><span class="show-ko">선봉대</span>
+                </h2>
+                <h3 class="text-lg sm:text-2xl text-gray-300 font-bold tracking-widest">
+                    <span class="show-en">Evolution of Conscription & The Phantom Reserves</span>
+                    <span class="show-ko">[실제] 징병제 문화의 진화와 예비군</span>
+                </h3>
+                <p class="mt-4 text-gray-400 max-w-4xl mx-auto text-sm sm:text-lg px-2 leading-relaxed">
+                    <span class="show-en">South Korea enforces mandatory military service for men. The harsh, isolated discipline of the past has evolved rapidly into a modernized, human-rights-focused system, though the underlying readiness remains. Furthermore, civilian access to firearms is strictly illegal outside of military contexts.</span>
+                    <span class="show-ko">한국은 남성 징병제를 채택하고 있습니다. 과거의 억압적이고 단절되었던 군기 문화는 최근 스마트폰 허용과 인권 보장 등 현대적인 병영 문화로 급격히 진화했습니다. 또한, 군부대 외부에서의 민간인 총기 소지는 엄격하게 불법으로 통제됩니다.</span>
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-black/50 border border-gray-700 p-4 sm:p-5 rounded-lg opacity-80">
+                            <h4 class="text-demon-red font-bold font-mono mb-3 border-b border-gray-700 pb-2 flex items-center text-sm sm:text-base"><i class="fas fa-history mr-2"></i>THE PAST <span class="text-xs text-gray-500 ml-1">(과거의 병영)</span></h4>
+                            <ul class="space-y-3 text-xs sm:text-sm text-gray-400">
+                                <li class="flex items-start"><i class="fas fa-angle-right text-demon-red mt-1 mr-2 flex-shrink-0"></i><span><strong class="text-gray-300"><span class="show-en">Long Service:</span><span class="show-ko">긴 복무 기간:</span></strong> <span class="show-en">Historically 24-36 months of isolation.</span><span class="show-ko">과거 2년에서 길게는 3년 이상의 고립된 생활.</span></span></li>
+                                <li class="flex items-start"><i class="fas fa-angle-right text-demon-red mt-1 mr-2 flex-shrink-0"></i><span><strong class="text-gray-300"><span class="show-en">Analog Comms:</span><span class="show-ko">아날로그 소통:</span></strong> <span class="show-en">Letters and brief payphone calls only.</span><span class="show-ko">손편지와 짧은 공중전화 통화가 유일한 소통 수단.</span></span></li>
+                                <li class="flex items-start"><i class="fas fa-angle-right text-demon-red mt-1 mr-2 flex-shrink-0"></i><span><strong class="text-gray-300"><span class="show-en">Harsh Discipline:</span><span class="show-ko">엄격한 군기:</span></strong> <span class="show-en">Severe hierarchy and hazing were common issues.</span><span class="show-ko">가혹행위와 악습이 잔존했던 수직적 계급 사회.</span></span></li>
+                            </ul>
+                        </div>
+                        <div class="bg-black/50 border border-demon-yellow/50 p-4 sm:p-5 rounded-lg relative overflow-hidden">
+                            <div class="absolute top-0 right-0 bg-demon-yellow text-black text-[10px] sm:text-xs font-bold px-2 py-1 rounded-bl-lg animate-pulse">SYSTEM UPDATED</div>
+                            <h4 class="text-demon-yellow font-bold font-mono mb-3 border-b border-gray-700 pb-2 flex items-center text-sm sm:text-base"><i class="fas fa-sync-alt mr-2"></i>THE PRESENT <span class="text-xs text-gray-500 ml-1">(현재의 변화)</span></h4>
+                            <ul class="space-y-3 text-xs sm:text-sm text-gray-300">
+                                <li class="flex items-start"><i class="fas fa-check text-demon-yellow mt-1 mr-2 flex-shrink-0"></i><span><strong class="text-white"><span class="show-en">Shorter Service:</span><span class="show-ko">복무 단축:</span></strong> <span class="show-en">Reduced to roughly 18 months.</span><span class="show-ko">약 18개월(육군 기준)로 크게 단축됨.</span></span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-demon-yellow mt-1 mr-2 flex-shrink-0"></i><span><strong class="text-white"><span class="show-en">Smartphone Access:</span><span class="show-ko">스마트폰 허용:</span></strong> <span class="show-en">Soldiers use phones after duty hours.</span><span class="show-ko">일과 후 개인 스마트폰 사용이 전면 허용됨.</span></span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-demon-yellow mt-1 mr-2 flex-shrink-0"></i><span><strong class="text-white"><span class="show-en">Zero Tolerance:</span><span class="show-ko">무관용 원칙:</span></strong> <span class="show-en">Strict reporting systems; hazing faces severe legal penalties.</span><span class="show-ko">가혹행위에 대한 징계 강화 및 빠른 신고 시스템 정착.</span></span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-6 border border-demon-yellow bg-yellow-900/20 rounded-xl mt-6">
+                        <div class="flex items-center gap-3 mb-4 sm:mb-6">
+                            <i class="fas fa-clipboard-list text-xl sm:text-2xl text-demon-yellow"></i>
+                            <h4 class="text-demon-yellow font-mono font-bold text-sm sm:text-lg tracking-wider">AGENT INSTRUCTION: TACTICAL ASSETS</h4>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- PX Card -->
+                            <div class="bg-black/40 p-3 sm:p-4 rounded-lg border border-yellow-500/30 hover:border-yellow-400 transition-colors flex flex-col justify-between h-full">
+                                <div>
+                                    <div class="flex items-center mb-2 sm:mb-3">
+                                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded bg-yellow-900/50 border border-demon-yellow flex items-center justify-center mr-3 flex-shrink-0">
+                                            <i class="fas fa-store text-yellow-400 text-sm sm:text-base"></i>
+                                        </div>
+                                        <h5 class="font-bold text-white text-sm sm:text-base"><span class="show-en">PX (Post Exchange) Loot</span><span class="show-ko">PX (군마트) 전설템</span></h5>
+                                    </div>
+
+                                    <!-- 📸 이미지 공간: 높이를 h-44 sm:h-52로 확장하고 overflow-hidden + rounded 적용 -->
+                                    <div class="h-44 sm:h-52 w-full rounded-md overflow-hidden mb-3 border border-yellow-500/20 bg-black/60">
+                                        <img class="w-full h-full object-cover block" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhd06PuEiqAni-eX8FEBNqqZT2Dbbld3y4ATx6njHyhFGgO8hAES-Ul1Kj5HN3cR3JDl2eOm64s9aVlJ9zduBGGLCEx_Ld-TtPAvCEPFAHDKyF1C27AURm3vhKyjh0h7DKjspbgwsYAvpAo-E-pRUQKdg-t5wWLYnKzw05f7T-pMDmSXhmZLvErLYBE4thT/s320/%EA%B5%B0%EB%8C%80PX.png" alt="PX Snail Cream">
+                                    </div>
+                                </div>
+
+                                <p class="text-[11px] sm:text-xs text-gray-400 leading-relaxed"><span class="show-en">Historically, 'Choco Pie' was the ultimate morale potion. Today, soldiers hunt for tax-free premium <strong>Snail Cream (달팽이 크림)</strong> to send to girlfriends and mothers. A legendary bartering item.</span><span class="show-ko">과거 초코파이가 사기 진작 포션이었다면, 현재는 면세가로 저렴하게 파는 <strong>프리미엄 달팽이 크림</strong>이 최강의 조공(선물) 아이템입니다. 에이전트 간 물물교환에 유용합니다.</span></p>
+                            </div>
+
+                            <!-- Reserve Forces Card -->
+                            <div class="bg-black/40 p-3 sm:p-4 rounded-lg border border-yellow-500/30 hover:border-yellow-400 transition-colors flex flex-col justify-between h-full">
+                                <div>
+                                    <div class="flex items-center mb-2 sm:mb-3">
+                                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded bg-yellow-900/50 border border-demon-yellow flex items-center justify-center mr-3 flex-shrink-0">
+                                            <i class="fas fa-users-cog text-yellow-400 text-sm sm:text-base"></i>
+                                        </div>
+                                        <h5 class="font-bold text-white text-sm sm:text-base"><span class="show-en">Yebigun (The Reserves)</span><span class="show-ko">예비군 (팬텀 아미)</span></h5>
+                                    </div>
+
+                                    <!-- 📸 이미지 공간: 높이를 h-44 sm:h-52로 확장하고 overflow-hidden + rounded 적용 -->
+                                    <div class="h-44 sm:h-52 w-full rounded-md overflow-hidden mb-3 border border-yellow-500/20 bg-black/60">
+                                        <img class="w-full h-full object-cover block" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiMJ13Eq_FIJDHlxCDs0suokxerkvTxqlwIA8pG-3PKJnuHjUfp_biKj1B-Qvkc01E7ZFtD8mIGNOrL1Lf8Qmtu0MzqcimCRreYUh1qoJkiO_UVksDEnF9_mu9z8OjqNQYkEmC7S4YoVSxy0aUt1jstKKUbClCnUgTJCmdk9e-P1SM7D8OCrnp8i-jhJoLZ/s320/%EC%98%88%EB%B9%84%EA%B5%B0.png" alt="Yebigun">
+                                    </div>
+                                </div>
+
+                                <p class="text-[11px] sm:text-xs text-gray-400 leading-relaxed"><span class="show-en">Discharge is an illusion. Men are recalled annually for training. If you see tired civilians suddenly roaming the city in woodland or digital camo, the 'Phantom Army' has been mobilized.</span><span class="show-ko">전역이 끝이 아닙니다. 매년 소집 훈련이 있어, 도심 한복판이나 지하철에서 피곤에 쩔은 표정으로 전투복을 입은 예비군(팬텀 아미)들을 마주칠 수 있습니다.</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual Radar / Gun Warning -->
+                <div class="lg:col-span-1 relative flex flex-col items-center justify-center py-8 lg:py-0">
+                    <div class="w-full max-w-[200px] sm:max-w-[250px] aspect-square neon-box-yellow rounded-xl bg-[#1a1a05] flex items-center justify-center overflow-hidden relative border border-demon-yellow/50 mb-6">
+                        <div class="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(255,235,59,0.05)_50%)] bg-[length:100%_4px]"></div>
+                        <div class="absolute w-full h-full border-4 border-demon-yellow rounded-full animate-ping opacity-20 scale-150"></div>
+                        <div class="absolute w-3/4 h-3/4 border-2 border-demon-yellow/50 rounded-full"></div>
+                        <i class="fas fa-crosshairs text-5xl sm:text-7xl text-demon-yellow relative z-10 drop-shadow-[0_0_10px_#ffeb3b]"></i>
+                    </div>
+                    <div class="bg-red-900/30 border border-red-500/50 p-3 rounded text-center w-full max-w-[250px]">
+                        <i class="fas fa-ban text-red-500 mb-1 text-xl"></i>
+                        <p class="text-[10px] sm:text-xs font-mono text-red-400 font-bold"><span class="show-en">CIVILIAN FIREARMS: NULL</span><span class="show-ko">민간 총기류 완벽 통제</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 04. ELIXIR SECTION -->
+    <section id="elixir" class="min-h-screen py-20 relative flex items-center border-t border-demon-cyan/30">
+        <div class="absolute inset-0 bg-gradient-to-b from-demon-dark via-[#041d2e] to-demon-dark opacity-80"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full reveal">
+            
+            <div class="text-center mb-12">
+                <h2 class="font-title text-4xl sm:text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-demon-cyan to-blue-500 mb-4 drop-shadow-[0_0_10px_rgba(0,243,255,0.8)]">
+                    <span class="show-en">ELIXIR OF SOULS</span><span class="show-ko">영혼의 영약</span>
+                </h2>
+                <h3 class="text-lg sm:text-2xl text-gray-300 font-bold tracking-widest">
+                    <span class="show-en">Traditional Spirits, Somaek & Nightlife Meta</span>
+                    <span class="show-ko">[실제] 폭탄주부터 24시간 밤문화까지</span>
+                </h3>
+            </div>
+
+            <!-- Potions Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12">
+                <!-- Soju -->
+                <div class="neon-box-cyan p-4 sm:p-5 rounded-xl bg-black/60 text-center relative overflow-hidden group flex flex-col justify-between">
+                    <div>
+                        <div class="absolute top-0 right-0 bg-green-500 text-black text-[10px] font-bold px-2 py-1 rounded-bl-lg z-20">BASE</div>
+                        <i class="fas fa-wine-bottle text-3xl sm:text-4xl text-green-500 mb-3 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-bold text-base sm:text-lg mb-2 text-white"><span class="show-en">Green Bottle (Soju)</span><span class="show-ko">초록병 (소주)</span></h4>
+                        
+                        <!-- 📸 이미지 공간 -->
+                        <div class="img-placeholder !h-28">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEghPneC_paKl5GFYmvws7REVqsxKWoNT0DW1TnUVXpGcVt8sPSbGNtUdeP62fjj6pp5ieXi5LF8BQEsHif7y8WGaTHLepOhfSOuv05O7ll_RE_TqQD0aJErprkEMwEvTIG3ETodZ2y5H3zsNIfrWii4WXCojQVxoR05X04g8mfUO6rLDsT3sIuyVbasSn-q/s320/%EC%86%8C%EC%A3%BC.png" alt="Soju">
+                        </div>
+
+                        <p class="text-[11px] sm:text-xs text-gray-400">
+                            <span class="show-en">The iconic clear spirit. Cheap, omnipresent, and deceptively potent. The fuel of Seoul.</span>
+                            <span class="show-ko">한국을 굴러가게 하는 마법의 초록 물약. 저렴하고 어디에나 있으며 강력합니다.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Somaek -->
+                <div class="neon-box-cyan p-4 sm:p-5 rounded-xl bg-black/60 text-center relative overflow-hidden group flex flex-col justify-between">
+                    <div>
+                        <div class="absolute top-0 right-0 bg-demon-cyan text-black text-[10px] font-bold px-2 py-1 rounded-bl-lg z-20">FUSION</div>
+                        <i class="fas fa-beer text-3xl sm:text-4xl text-blue-400 mb-3 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-bold text-base sm:text-lg mb-2 text-white"><span class="show-en">Somaek (Bomb Shot)</span><span class="show-ko">쏘맥 (폭탄주)</span></h4>
+                        
+                        <!-- 📸 이미지 공간 -->
+                        <div class="img-placeholder !h-28">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgvzYv_nWcOBBOm08_97b4Uk-YJHAg8jO_bnoFC1njiPHFyGfKJLAbmCnBKP-TSsJk-lxJV9fqcHNl2LmHjmde45AsE0jaepXh2uEzy3Jj3RsYegbrHQSHFHApUFIeT5fxydwtRw0fEByr68d_yebA2TK3teSUQeUBgIKARFuRF4i1m4HvSzaTIziOJPIQ9/s320/%EC%8F%98%EB%A7%A5.png" alt="Somaek">
+                        </div>
+
+                        <p class="text-[11px] sm:text-xs text-gray-400">
+                            <span class="show-en">Soju + Beer. Stirred violently with a spoon to create a whirlpool. The ultimate team potion.</span>
+                            <span class="show-ko">소주와 맥주의 황금비율. 숟가락으로 회오리를 만들어 제조하는 회식 퓨전 포션.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Flavored -->
+                <div class="neon-box-cyan p-4 sm:p-5 rounded-xl bg-black/60 text-center relative overflow-hidden group flex flex-col justify-between">
+                    <div>
+                        <div class="absolute top-0 right-0 bg-pink-500 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg z-20">SWEET</div>
+                        <i class="fas fa-glass-martini-alt text-3xl sm:text-4xl text-pink-400 mb-3 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-bold text-base sm:text-lg mb-2 text-white"><span class="show-en">Flavored Soju</span><span class="show-ko">과일 소주</span></h4>
+                        
+                        <!-- 📸 이미지 공간 -->
+                        <div class="img-placeholder !h-28">
+                            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEiL066t_WxofOv2u9ZI8f5kQ3a5CXjbeS4ERGMIKmCt31V_OvteWkdB6bF8mrl5fx32su6w8Ypyl5JZ1zwjjnFwLaCIcmZYLsuYVIZZVmSX47LXM0RSOZ9gqA2j0coMadboKrYOhFLMN0kTBZzAjCrm9nQENTia1sKiuRXBM9JMUy8PfnH45un6px6v-1zc/s320/%ED%94%8C%EB%A0%88%EC%9D%B4%EB%B2%84%EC%86%8C%EC%A3%BC.png" alt="Flavored Soju">
+                        </div>
+
+                        <p class="text-[11px] sm:text-xs text-gray-400">
+                            <span class="show-en">Infused with grapefruit or peach. Sweet but acts as a stealthy assassin to your sobriety.</span>
+                            <span class="show-ko">자몽, 청포도 등 달콤한 맛. 쓴맛을 감춰 취기를 숨기는 암살자 포션입니다.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Makgeolli -->
+                <div class="neon-box-cyan p-4 sm:p-5 rounded-xl bg-black/60 text-center relative overflow-hidden group flex flex-col justify-between">
+                    <div>
+                        <div class="absolute top-0 right-0 bg-yellow-100 text-black text-[10px] font-bold px-2 py-1 rounded-bl-lg z-20">ANCIENT</div>
+                        <i class="fas fa-bowl-rice text-3xl sm:text-4xl text-yellow-100 mb-3 group-hover:scale-110 transition-transform"></i>
+                        <h4 class="font-bold text-base sm:text-lg mb-2 text-white"><span class="show-en">Makgeolli</span><span class="show-ko">전통 쌀 막걸리</span></h4>
+                        
+                        <!-- 📸 이미지 공간 -->
+                        <div class="img-placeholder !h-28">
+                             <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhoCmGiqcD0Xk4zZdnmARHlrcTMFufjYcV5lkTsfy9bXgZZZMuQ7BO8BqsHpWS0SaMK7lsqCiprJBU8OJHw8bq9AcIfLKz3a-6VOtkyqa4Vub0Lk9TcMjZG6aVs6bulH5p0_bb6mAaVUAg5OIFe2lFoGLSfqPblIzzWudB0TbD9ISGtyXDRQ0NT5F3C-kj1/s320/%EB%A7%89%EA%B1%B8%EB%A6%AC.png" alt="Makgeolli">
+                        </div>
+
+                        <p class="text-[11px] sm:text-xs text-gray-400">
+                            <span class="show-en">Cloudy rice wine. Historically paired with rainy days and savory pancakes (Jeon).</span>
+                            <span class="show-ko">비 오는 날 부침개와 함께 소비되는 전통 쌀 발효주. 고대의 대지 치유 물약.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Etiquette and Culture Shift -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- Etiquette Protocol -->
+                <div class="bg-black/60 border border-demon-cyan/50 rounded-xl p-5 sm:p-6 relative group hover:border-demon-cyan transition-all">
+                    <h4 class="text-base sm:text-lg font-bold text-demon-cyan mb-3 font-mono flex items-center"><i class="fas fa-user-shield mr-2"></i>PROTOCOL: HIERARCHY BYPASS</h4>
+                    <p class="text-xs sm:text-sm text-gray-300 mb-3 leading-relaxed">
+                        <span class="show-en"><strong>[Reality - Etiquette]</strong> When drinking with elders or superiors, Koreans use two hands to pour/receive. Crucially, they turn their head and body away to drink, covering the glass.</span>
+                        <span class="show-ko"><strong>[실제 - 주도 예절]</strong> 연장자나 상사와 술을 마실 때는 두 손으로 따르고 받습니다. 술을 마실 때는 고개를 돌리고 잔을 가린 채 마시는 것이 예의입니다.</span>
+                    </p>
+                    <div class="p-3 bg-cyan-900/20 border border-cyan-500/30 rounded-lg">
+                        <p class="text-demon-cyan font-mono font-bold text-[10px] sm:text-xs mb-1">AGENT NOTE</p>
+                        <p class="text-[10px] sm:text-xs text-gray-400">
+                            <span class="show-en">Strict execution required. Turning the head acts as a camouflage mechanic. Failure to execute triggers immediate social aggro from high-level NPC elders.</span>
+                            <span class="show-ko">필수 회피 기동. 고개를 돌리는 것은 상위 계급 NPC의 어그로를 피하는 은폐 스킬입니다. 실패 시 엄청난 사회적 질타(데미지)가 들어옵니다.</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Culture Update -->
+                <div class="bg-blue-900/10 border border-blue-500/30 rounded-xl p-5 sm:p-6 relative">
+                    <div class="absolute -top-3 left-4 bg-demon-dark px-2 font-mono text-blue-400 text-[10px] border border-blue-400/50 rounded">SYSTEM UPDATE: CULTURE SHIFT</div>
+                    <h4 class="text-base sm:text-lg font-bold text-white mb-2 mt-2"><i class="fas fa-sync-alt mr-2 text-blue-400"></i><span class="show-en">The Changing 'Hoesik' Meta</span><span class="show-ko">변화하는 회식 트렌드</span></h4>
+                    <p class="text-xs sm:text-sm text-gray-400 leading-relaxed mb-4">
+                        <span class="show-en">Following global trends, overall alcohol consumption among youth is decreasing. Mandatory heavy-drinking company dinners (Hoesik) are becoming obsolete. Teams now prefer "Lunch Hoesik", nice cafes, or cultural outings.</span>
+                        <span class="show-ko">젊은 층의 술 소비가 줄어들며, 필수 참석과 술 강요가 있던 야간 '회식'이 사라지는 추세입니다. 대신 맛집에서 '점심 회식'을 하거나 카페, 영화 관람 등으로 자율화되고 있습니다.</span>
+                    </p>
+                    <div class="flex flex-col gap-2 font-mono text-[10px] sm:text-xs">
+                        <div class="flex items-center justify-between p-2 bg-red-900/20 border border-red-500/30 rounded">
+                            <span class="text-red-400 line-through">MANDATORY NIGHT DRINKING</span>
+                            <span class="text-red-500">DEPRECATED</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 bg-green-900/20 border border-green-500/30 rounded">
+                            <span class="text-green-400">LUNCH GATHERINGS & CAFES</span>
+                            <span class="text-green-500 animate-pulse">RECOMMENDED</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent Raid Warning -->
+            <div class="p-5 sm:p-6 border border-demon-cyan/50 bg-cyan-900/20 rounded-xl">
+                <div class="flex items-center mb-3">
+                    <i class="fas fa-exclamation-triangle text-demon-cyan text-xl mr-3 animate-pulse"></i>
+                    <h4 class="text-demon-cyan font-mono font-bold text-sm sm:text-base">WARNING: HARDCORE RAID DIMENSIONS</h4>
+                </div>
+                <p class="text-xs sm:text-sm text-gray-300 mb-6">
+                    <span class="show-en">Despite trends, hardcore native squads still execute multi-stage raids. Seoul's nightlife districts operate 24/7. Be prepared for dimensional shifting.</span>
+                    <span class="show-ko">트렌드 변화에도 불구하고, 주류를 즐기는 숙련된 파티는 여전히 24시 번화가에서 다단계 레이드를 뜁니다. 차원 이동에 대비하십시오.</span>
+                </p>
+                <div class="flex items-center justify-between gap-2 sm:gap-4 overflow-x-auto hide-scrollbar">
+                    <div class="text-center flex-shrink-0 min-w-[70px]">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-900/50 border border-blue-400 mx-auto flex items-center justify-center mb-2">
+                            <span class="font-bold text-white text-xs sm:text-sm">1차</span>
+                        </div>
+                        <p class="font-mono text-[10px] sm:text-xs text-gray-400">K-BBQ (Dinner)</p>
+                    </div>
+                    <div class="flex-grow border-t-2 border-dashed border-gray-600 min-w-[20px]"></div>
+                    <div class="text-center flex-shrink-0 min-w-[70px]">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-900/50 border border-blue-400 mx-auto flex items-center justify-center mb-2">
+                            <span class="font-bold text-white text-xs sm:text-sm">2차</span>
+                        </div>
+                        <p class="font-mono text-[10px] sm:text-xs text-gray-400">PUB/HOF</p>
+                    </div>
+                    <div class="flex-grow border-t-2 border-dashed border-gray-600 min-w-[20px]"></div>
+                    <div class="text-center flex-shrink-0 min-w-[70px]">
+                        <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-purple-900/50 border-2 border-demon-purple mx-auto flex items-center justify-center mb-2 shadow-[0_0_15px_#b026ff]">
+                            <i class="fas fa-microphone-alt text-demon-purple animate-bounce"></i>
+                        </div>
+                        <p class="font-mono text-[10px] sm:text-xs text-demon-purple font-bold">NORAEBANG</p>
+                    </div>
+                    <div class="flex-grow border-t-2 border-dashed border-gray-600 min-w-[20px]"></div>
+                    <div class="text-center flex-shrink-0 min-w-[70px]">
+                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-900/50 border border-blue-400 mx-auto flex items-center justify-center mb-2">
+                            <span class="font-bold text-white text-xs sm:text-sm">3차</span>
+                        </div>
+                        <p class="font-mono text-[10px] sm:text-xs text-gray-400">SOUP (Dawn)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 05. SHIELD SECTION -->
+    <section id="shield" class="min-h-screen py-20 relative flex items-center border-t border-white/30 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-demon-dark via-[#1a2626] to-demon-dark opacity-80"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full reveal">
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="font-title text-4xl sm:text-5xl md:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400 mb-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
+                    <span class="show-en">THE UNSEEN SHIELD</span><span class="show-ko">보이지 않는 방패</span>
+                </h2>
+                <h3 class="text-lg sm:text-2xl text-teal-300 font-bold tracking-widest">
+                    <span class="show-en">Public Safety, Nunchi & The Panopticon</span>
+                    <span class="show-ko">[실제] 치안 강국, 눈치 문화, 그리고 CCTV</span>
+                </h3>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                <!-- Left: Protocols -->
+                <div class="space-y-6">
+                    <!-- Token of Claiming / CCTV -->
+                    <div class="p-5 sm:p-6 bg-black/60 border border-white/20 rounded-xl hover:border-white/60 transition-colors group">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-camera text-2xl sm:text-3xl text-white drop-shadow-[0_0_8px_#fff]"></i>
+                            </div>
+                            <div class="ml-4 sm:ml-5 w-full">
+                                <h4 class="text-lg sm:text-xl font-bold text-white mb-1 sm:mb-2">
+                                    <span class="show-en">Civic Trust & Unspoken Rules</span>
+                                    <span class="show-ko">암묵적 룰과 신뢰의 결계</span>
+                                </h4>
+
+                                <!-- 📸 이미지 공간 -->
+                                <div class="img-placeholder">
+                                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgjHIS_WbOQRU23brvZQ-AOTQzLPK1bX4-0ZDSVgX5-frBFYYtV-CIxCe7qE51EaYORNAnhcTgemg3COxQ_c7ATBsiHP7VlvC-Y3fGner95KNNjCo4LSeJZ0C-_YDEieomIPB-OJyWuAij25ymyqa8YuHDlSk6FqmMe0ug3iRsnwro3qsLYJMoi3_sEQOUc/s320/%EC%B9%B4%ED%8E%98%EB%85%B8%ED%8A%B8%EB%B6%81.png" alt="Cafe Laptop">
+                                </div>
+
+                                <p class="text-gray-300 text-xs sm:text-sm leading-relaxed mb-3">
+                                    <span class="show-en"><strong>[Reality]</strong> South Koreans freely leave valuable items on cafe tables to "reserve" seats, rooted in a strong culture of civic trust where touching others' belongings is strictly taboo.</span>
+                                    <span class="show-ko"><strong>[실제]</strong> 한국은 카페에서 자리를 선점할 때 고가의 기기를 테이블에 둡니다. 이는 남의 물건에 절대 손대지 않는 높은 시민의식과 신뢰를 보여주는 문화입니다.</span>
+                                </p>
+                                <div class="bg-gray-800/50 p-2 rounded border border-gray-600">
+                                    <p class="text-white font-mono text-[10px] sm:text-xs"><i class="fas fa-info-circle mr-1"></i>AGENT NOTE: Absolute immunity field for electronics. PvP looting is disabled in cafes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Nunchi Radar -->
+                    <div class="p-5 sm:p-6 bg-black/60 border border-teal-500/30 rounded-xl hover:border-teal-400 transition-colors group">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <i class="fas fa-satellite-dish text-2xl sm:text-3xl text-teal-400 drop-shadow-[0_0_8px_#2dd4bf]"></i>
+                            </div>
+                            <div class="ml-4 sm:ml-5 w-full">
+                                <h4 class="text-lg sm:text-xl font-bold text-teal-300 mb-1 sm:mb-2">
+                                    <span class="show-en">Tactical Radar: NUNCHI</span>
+                                    <span class="show-ko">초감각 레이더: 눈치</span>
+                                </h4>
+
+                                <!-- 📸 이미지 공간 -->
+                                <div class="img-placeholder">
+                                    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgUywy6QiHy1z5AbEFsLJHc1CkD0GzZb0Sw-zqTPYqfZe6Tnox1Rucl5r7necyzOmK9gjctkcMcUXT5JfzQNrLGz8SfgDZ40ddeX7OMkkM6GLiXeJdHmY4XVEOFSjhyphenhyphenM8grHLDWlfLtJ1YCHrth983I-4jW3pS-vZ_Cm8B5WzlOkL7Vw8rfPXUHbPg3Mxd6/s320/%EB%88%88%EC%B9%98.png" alt="Nunchi">
+                                </div>
+
+                                <p class="text-gray-300 text-xs sm:text-sm leading-relaxed mb-3">
+                                    <span class="show-en"><strong>[Reality]</strong> 'Nunchi' (literally "eye measure") is the subtle art of instantly assessing the mood, hierarchy, and unwritten rules of a room or situation. It's a vital social survival skill.</span>
+                                    <span class="show-ko"><strong>[실제]</strong> 방 안의 분위기, 사람들 간의 서열, 암묵적인 룰을 즉각적으로 파악하는 비언어적 커뮤니케이션 기술. 한국 사회 생존에 필수적인 '눈치' 문화입니다.</span>
+                                </p>
+                                <div class="bg-teal-900/20 p-2 rounded border border-teal-500/30">
+                                    <p class="text-teal-300 font-mono text-[10px] sm:text-xs"><i class="fas fa-radar mr-1"></i>AGENT NOTE: Keep this 6th sense active to blend in without triggering social alarms. "Have Nunchi" = Activate stealth.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Umbrella Paradox -->
+                    <div class="p-4 sm:p-5 border border-demon-red/60 bg-red-900/20 rounded-xl relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 bg-demon-red text-white text-[10px] sm:text-xs font-bold px-2 sm:px-3 py-1 rounded-bl-lg animate-pulse">ERROR</div>
+                        <p class="text-demon-red font-mono font-bold text-xs sm:text-sm mb-2"><i class="fas fa-bug mr-2"></i>THE UMBRELLA PARADOX (버그 발견)</p>
+                        <p class="text-xs sm:text-sm text-gray-300 mb-4">
+                            <span class="show-en">Critical glitch in the trust matrix: While $2,000 laptops are perfectly safe, low-tier loot like <strong>$3 Umbrellas</strong> (on rainy days) and <strong>Bicycles</strong> left outside are highly vulnerable to phantom looters!</span>
+                            <span class="show-ko">신뢰 결계의 치명적 오류: 200만 원짜리 맥북은 무사하지만, 비 오는 날 식당 앞 <strong>비닐우산</strong>과 길거리에 묶어두지 않은 <strong>자전거</strong>는 순식간에 루팅(도난)당합니다!</span>
+                        </p>
+                        <div class="flex gap-6 justify-center border-t border-demon-red/30 pt-4">
+                            <div class="text-center group-hover:scale-110 transition-transform bg-black/40 p-2 rounded border border-red-500/30">
+                                <i class="fas fa-umbrella text-2xl text-gray-400 group-hover:text-demon-red transition-colors mb-1"></i>
+                                <p class="text-[10px] text-red-400 font-mono">TARGET_01: UMBRELLA</p>
+                            </div>
+                            <div class="text-center group-hover:scale-110 transition-transform bg-black/40 p-2 rounded border border-red-500/30">
+                                <i class="fas fa-bicycle text-2xl text-gray-400 group-hover:text-demon-red transition-colors mb-1"></i>
+                                <p class="text-[10px] text-red-400 font-mono">TARGET_02: BICYCLE</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Visual Radar Graphic -->
+                <div class="relative h-[300px] sm:h-[400px] lg:h-[500px] neon-box-white rounded-2xl bg-black/60 backdrop-blur overflow-hidden flex items-center justify-center group border border-teal-500/30">
+                    <div class="relative z-10 text-center w-full flex flex-col items-center">
+                        <div class="w-32 h-32 sm:w-48 sm:h-48 border border-teal-500 rounded-full flex items-center justify-center mb-6 relative overflow-hidden shadow-[0_0_30px_rgba(45,212,191,0.2)]">
+                            <div class="absolute w-full h-[2px] bg-teal-400 top-1/2 left-0 shadow-[0_0_15px_#2dd4bf] origin-left animate-[spin_3s_linear_infinite]"></div>
+                            <div class="absolute w-full h-full border-2 border-teal-500/50 rounded-full animate-ping opacity-70"></div>
+                            <div class="absolute w-3/4 h-3/4 border border-teal-500/30 rounded-full"></div>
+                            <div class="absolute w-1/2 h-1/2 border border-teal-500/20 rounded-full"></div>
+                            <i class="fas fa-eye text-4xl sm:text-6xl text-teal-400 relative z-20 group-hover:text-white transition-colors"></i>
+                        </div>
+                        
+                        <div class="bg-teal-900/50 px-4 sm:px-6 py-2 rounded-full border border-teal-500/50 inline-flex items-center gap-2">
+                            <div class="w-2 h-2 bg-teal-400 rounded-full animate-pulse"></div>
+                            <span class="text-teal-300 font-mono font-bold tracking-widest text-[10px] sm:text-sm">NUNCHI RADAR: ACTIVE</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    Footer
+    <footer class="border-t border-gray-800 bg-black py-6 sm:py-8 text-center">
+        <p class="font-title text-xl sm:text-2xl mb-2"><span class="text-demon-cyan">K-</span><span class="text-demon-red">HUNTERS</span> ARCHIVE</p>
+        <p class="text-[10px] sm:text-xs text-gray-600">© 2026 Asia Pacific Veolia Induction Program. SEOUL NIGHTMARE.</p>
+    </footer>
+
+    <script>
+        function toggleLanguage() {
+            document.body.classList.toggle('lang-ko');
+            const btnTexts = document.querySelectorAll('.lang-text');
+            btnTexts.forEach(btnText => {
+                if(document.body.classList.contains('lang-ko')) {
+                    btnText.innerText = 'ENG';
+                } else {
+                    btnText.innerText = 'KOR';
+                }
+            });
+        }
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+    </script>
+</body>
+</html>
