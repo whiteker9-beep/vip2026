@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>VIP 2026 : K-Culture 5-Stage Challenge</title>
+  <link rel="stylesheet" href="./game.css" />
+</head>
+<body>
+<div class="app">
+  <!-- 1. 메인 로비 (닉네임 + 스테이지 선택 + 통합/스테이지별 랭킹) -->
+  <div id="screen-intro">
+    <div>
+      <span class="badge">VIP 2026 K-CULTURE CHALLENGE</span>
+      <h1>Select a K-Culture Stage!</h1>
+      <div class="sub-ko">원하는 한국 문화 미니게임을 선택해 도전하세요!</div>
+
+      <div class="card" style="padding:12px 14px;">
+        <label for="nickname" style="font-size:0.88rem;">
+          <strong>Player Nickname (Team / Name)</strong>
+          <span style="font-size:0.78rem; color:#94a3b8;"> · 닉네임 (같은 닉네임으로 총점 합산!)</span>
+        </label>
+        <input type="text" id="nickname" placeholder="e.g. Marketing_Alex / 마케팅_홍길동" maxlength="14" style="margin-top:6px; padding:10px;" />
+      </div>
+
+      <!-- 5개 스테이지 선택 버튼 리스트 -->
+      <div class="stage-select-list" id="stage-list"></div>
+
+      <!-- 실시간 랭킹 보드 (전체 합산 + 스테이지 1~5 탭) -->
+      <div class="card" style="margin-top:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <strong style="font-size:0.95rem;">🏆 VIP 2026 TOP 10 <span style="font-size:0.78rem; color:#94a3b8;">(랭킹)</span></strong>
+          <button onclick="GameEngine.loadRankings()" style="background:none; border:none; color:#facc15; cursor:pointer; font-size:0.82rem;">Refresh ↻</button>
+        </div>
+        <div class="rank-tabs" id="lobby-rank-tabs">
+          <button class="rank-tab-btn active" onclick="GameEngine.switchRankTab('total', this)">👑 Total (합산)</button>
+          <button class="rank-tab-btn" onclick="GameEngine.switchRankTab('stage1', this)">1. Shaman (부적)</button>
+          <button class="rank-tab-btn" onclick="GameEngine.switchRankTab('stage2', this)">2. Herbal (쌍화탕)</button>
+          <button class="rank-tab-btn" onclick="GameEngine.switchRankTab('stage3', this)">3. Army/PX (군대)</button>
+          <button class="rank-tab-btn" onclick="GameEngine.switchRankTab('stage4', this)">4. Somaek (쏘맥)</button>
+          <button class="rank-tab-btn" onclick="GameEngine.switchRankTab('stage5', this)">5. Security (치안)</button>
+        </div>
+        <table>
+          <thead><tr><th>Rank</th><th>Player</th><th>Score</th></tr></thead>
+          <tbody id="lobby-rank-body"><tr><td colspan="3" style="text-align:center;">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 선택한 스테이지 상세 가이드 -->
+  <div id="screen-bridge" class="hidden">
+    <div>
+      <span class="badge" id="bridge-badge">STAGE 1</span>
+      <h1 id="bridge-title">Stage 1</h1>
+      <div class="sub-ko" id="bridge-title-ko">제1관문</div>
+
+      <div class="card">
+        <p class="story-en" id="bridge-desc-en"></p>
+        <p class="story-ko" id="bridge-desc-ko" style="margin-top:6px;"></p>
+
+        <div class="rule-box">
+          <div class="rule-title">🎮 How to Play / 조작 방법</div>
+          <div class="rule-en" id="bridge-rule-en"></div>
+          <div class="rule-ko" id="bridge-rule-ko"></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <button class="btn" onclick="GameEngine.launchCurrentStage()">Play Now / 도전 시작 ▶</button>
+      <button class="btn btn-secondary" onclick="GameEngine.goHome()">← Back to Stage Menu / 메뉴로 돌아가기</button>
+    </div>
+  </div>
+
+  <!-- 3. 게임 플레이 화면 -->
+  <div id="screen-play" class="hidden">
+    <div>
+      <div class="hud">
+        <span>SCORE: <span id="hud-score">0</span> <span id="hud-combo" class="combo-pill hidden">x1.0</span></span>
+        <span id="hud-time">22s</span>
+      </div>
+      <div class="play-wrapper">
+        <div id="play-area"></div>
+        <div id="big-combo-toast" class="hidden"></div>
+        <div id="countdown-overlay" class="hidden"></div>
+      </div>
+    </div>
+    <div style="text-align:center; color:#cbd5e1; font-size:0.82rem; margin-top:8px; line-height:1.35;" id="play-hint"></div>
+    <button class="btn btn-secondary" style="padding:10px; font-size:0.85rem; margin-top:10px;" onclick="GameEngine.goHome()">Quit to Menu / 그만하고 메뉴로</button>
+  </div>
+
+  <!-- 4. 스테이지 클리어 결과 & 해당 스테이지/전체 랭킹 -->
+  <div id="screen-ending" class="hidden">
+    <div>
+      <span class="badge" style="background:#16a34a;" id="result-stage-badge">STAGE CLEAR</span>
+      <h1 id="ending-title">Stage Complete!</h1>
+      <div class="sub-ko" id="ending-sub">스테이지 기록이 저장되었습니다!</div>
+
+      <div class="card" style="text-align:center;">
+        <div style="color:#94a3b8; font-size:0.88rem;" id="result-nick"></div>
+        <div style="font-size:2.4rem; font-weight:900; color:#facc15; margin:4px 0;" id="result-score">0 pts</div>
+        <div style="color:#4ade80; font-weight:bold; font-size:0.9rem;" id="result-total-preview"></div>
+        <div style="color:#94a3b8; font-size:0.8rem; margin-top:6px;" id="save-status"></div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <strong style="font-size:0.95rem;" id="result-board-title">🏆 Stage TOP 10</strong>
+          <button onclick="GameEngine.loadRankings()" style="background:none; border:none; color:#facc15; cursor:pointer; font-size:0.82rem;">Refresh ↻</button>
+        </div>
+        <div class="rank-tabs" id="result-rank-tabs">
+          <button class="rank-tab-btn" data-tab="total" onclick="GameEngine.switchRankTab('total', this)">👑 Total (합산)</button>
+          <button class="rank-tab-btn" data-tab="stage1" onclick="GameEngine.switchRankTab('stage1', this)">1. Shaman</button>
+          <button class="rank-tab-btn" data-tab="stage2" onclick="GameEngine.switchRankTab('stage2', this)">2. Herbal</button>
+          <button class="rank-tab-btn" data-tab="stage3" onclick="GameEngine.switchRankTab('stage3', this)">3. Army/PX</button>
+          <button class="rank-tab-btn" data-tab="stage4" onclick="GameEngine.switchRankTab('stage4', this)">4. Somaek</button>
+          <button class="rank-tab-btn" data-tab="stage5" onclick="GameEngine.switchRankTab('stage5', this)">5. Security</button>
+        </div>
+        <table>
+          <thead><tr><th>Rank</th><th>Player</th><th>Score</th></tr></thead>
+          <tbody id="result-rank-body"><tr><td colspan="3" style="text-align:center;">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div>
+      <button class="btn" id="btn-next-stage" onclick="GameEngine.playNextStage()">Play Next Stage / 다음 스테이지 도전 ▶</button>
+      <button class="btn btn-secondary" onclick="GameEngine.goHome()">Stage Menu / 스테이지 선택 메뉴로</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ★ 새로 배포한 Google Apps Script 웹 앱 URL을 입력하세요 ★
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzBhwn3oJNghPm0jmB8BMGHy2OLyO8iwhDSB-yQue6B00iu4dK0WyS_eVs8I-Tuewn3/exec";
+
+  window.GameEngine = {
+    stage: 1,
+    totalScore: 0, // 현재 플레이 중인 단일 스테이지의 점수
+    gameLoop: null,
+    timerInterval: null,
+    stagesInfo: {},
+    stageRunners: {},
+    rankingCache: { total: [], stage1: [], stage2: [], stage3: [], stage4: [], stage5: [] },
+    activeRankTab: 'total',
+
+    registerStage(num, info, runnerFn) {
+      this.stagesInfo[num] = info;
+      this.stageRunners[num] = runnerFn;
+    },
+
+    // 기기 내 개인 최고 기록 저장/조회 (5개 합산 미리보기용)
+    getLocalBest() {
+      try {
+        return JSON.parse(localStorage.getItem('vip2026_best_scores') || '{}');
+      } catch (e) { return {}; }
+    },
+    saveLocalBest(stageNum, score) {
+      const best = this.getLocalBest();
+      const key = 'stage' + stageNum;
+      if (!best[key] || score > best[key]) {
+        best[key] = score;
+        localStorage.setItem('vip2026_best_scores', JSON.stringify(best));
+      }
+      return best;
+    },
+
+    renderStageMenu() {
+      const listEl = document.getElementById('stage-list');
+      const best = this.getLocalBest();
+      const shortNames = {
+        1: { icon: '👻', en: 'Stage 1 · Shamanism', ko: '저승사자 부적 봉인' },
+        2: { icon: '🍵', en: 'Stage 2 · K-Medicine', ko: '쌍화탕 & 한방 침 놓기' },
+        3: { icon: '🪖', en: 'Stage 3 · Army & PX', ko: '눈가리기 & PX 화장품' },
+        4: { icon: '🍻', en: 'Stage 4 · Somaek & MZ', ko: '폭탄주 & MZ 회식 탈출' },
+        5: { icon: '🚲', en: 'Stage 5 · K-Security', ko: '카페 노트북 & 자전거 치안' }
+      };
+
+      listEl.innerHTML = [1, 2, 3, 4, 5].map(num => {
+        const s = shortNames[num];
+        const myScore = best['stage' + num];
+        return `
+          <button class="stage-card-btn" onclick="GameEngine.selectStage(${num})">
+            <div class="stage-card-left">
+              <span style="font-size:1.6rem;">${s.icon}</span>
+              <div>
+                <div style="font-weight:800; font-size:0.95rem;">${s.en}</div>
+                <div style="font-size:0.78rem; color:#94a3b8;">${s.ko}</div>
+              </div>
+            </div>
+            <div>
+              ${myScore !== undefined
+                ? `<span class="stage-best-tag">Best: ${myScore.toLocaleString()}</span>`
+                : `<span class="stage-num-badge">PLAY ▶</span>`}
+            </div>
+          </button>
+        `;
+      }).join('');
+    },
+
+    showOnly(id) {
+      ['screen-intro', 'screen-bridge', 'screen-play', 'screen-ending'].forEach(s => {
+        document.getElementById(s).classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
+    },
+
+    selectStage(st) {
+      const nickInput = document.getElementById('nickname');
+      const nick = nickInput.value.trim();
+      if (!nick) {
+        alert("Please enter your nickname first! / 닉네임을 먼저 입력해주세요!");
+        nickInput.focus();
+        return;
+      }
+      localStorage.setItem('vip2026_nick', nick);
+      this.openBridge(st);
+    },
+
+    openBridge(st) {
+      this.clearLoops();
+      this.stage = st;
+      const info = this.stagesInfo[st];
+      document.getElementById('bridge-badge').innerText = info.badge;
+      document.getElementById('bridge-title').innerText = info.title;
+      document.getElementById('bridge-title-ko').innerText = info.titleKo;
+      document.getElementById('bridge-desc-en').innerText = info.descEn;
+      document.getElementById('bridge-desc-ko').innerText = info.descKo;
+      document.getElementById('bridge-rule-en').innerText = info.ruleEn;
+      document.getElementById('bridge-rule-ko').innerText = info.ruleKo;
+      this.showOnly('screen-bridge');
+    },
+
+    launchCurrentStage() {
+      this.clearLoops();
+      this.totalScore = 0; // 선택한 해당 스테이지 점수 0점부터 시작
+      this.showOnly('screen-play');
+      document.getElementById('play-hint').innerText = this.stagesInfo[this.stage].hint;
+      document.getElementById('hud-combo').classList.add('hidden');
+      document.getElementById('big-combo-toast').classList.add('hidden');
+      document.getElementById('countdown-overlay').classList.add('hidden');
+      this.stageRunners[this.stage](this);
+    },
+
+    updateHud(t, combo = 0, showComboPopup = false) {
+      document.getElementById('hud-score').innerText = this.totalScore.toLocaleString();
+      document.getElementById('hud-time').innerText = `${t}s`;
+
+      const comboEl = document.getElementById('hud-combo');
+      if (combo > 1) {
+        comboEl.classList.remove('hidden');
+        comboEl.innerText = `${combo} COMBO!`;
+        if (showComboPopup) this.triggerComboToast(combo);
+      } else {
+        comboEl.classList.add('hidden');
+      }
+    },
+
+    triggerComboToast(combo) {
+      const toast = document.getElementById('big-combo-toast');
+      toast.innerHTML = `🔥 ${combo} COMBO!`;
+      toast.classList.remove('hidden');
+      toast.classList.remove('combo-pop-anim');
+      void toast.offsetWidth;
+      toast.classList.add('combo-pop-anim');
+      clearTimeout(this._comboTimer);
+      this._comboTimer = setTimeout(() => toast.classList.add('hidden'), 650);
+    },
+
+    updateCountdown(timeLeft) {
+      const cdEl = document.getElementById('countdown-overlay');
+      if (timeLeft <= 3 && timeLeft >= 1) {
+        cdEl.innerText = timeLeft;
+        cdEl.classList.remove('hidden');
+        cdEl.classList.remove('cd-pulse');
+        void cdEl.offsetWidth;
+        cdEl.classList.add('cd-pulse');
+      } else {
+        cdEl.classList.add('hidden');
+      }
+    },
+
+    triggerShake() {
+      const area = document.getElementById('play-area');
+      area.classList.remove('shake');
+      void area.offsetWidth;
+      area.classList.add('shake');
+    },
+
+    clearLoops() {
+      clearInterval(this.gameLoop);
+      clearInterval(this.timerInterval);
+      const area = document.getElementById('play-area');
+      if (area) {
+        area.onpointerdown = null;
+        area.onpointermove = null;
+      }
+      const cdEl = document.getElementById('countdown-overlay');
+      if (cdEl) cdEl.classList.add('hidden');
+    },
+
+    // 개별 스테이지 종료 시 호출 (기존 stage1~5 JS 파일과 100% 호환)
+    nextStageOrEnd() {
+      this.finishSingleStage();
+    },
+
+    async finishSingleStage() {
+      this.clearLoops();
+      this.showOnly('screen-ending');
+
+      const stKey = 'stage' + this.stage;
+      const bestMap = this.saveLocalBest(this.stage, this.totalScore);
+      const myTotalSum = Object.values(bestMap).reduce((a, b) => a + b, 0);
+      const clearedCnt = Object.keys(bestMap).length;
+
+      const nick = document.getElementById('nickname').value.trim();
+      document.getElementById('result-stage-badge').innerText = `STAGE ${this.stage} CLEAR`;
+      document.getElementById('ending-title').innerText = this.stagesInfo[this.stage].title;
+      document.getElementById('ending-sub').innerText = `${this.stagesInfo[this.stage].titleKo} 완료!`;
+      document.getElementById('result-nick').innerText = `Player: ${nick}`;
+      document.getElementById('result-score').innerText = `${this.totalScore.toLocaleString()} pts`;
+      document.getElementById('result-total-preview').innerText =
+        `My Total Best (${clearedCnt}/5 Stages): ${myTotalSum.toLocaleString()} pts`;
+
+      // 다음 스테이지 버튼 표시 여부
+      const nextBtn = document.getElementById('btn-next-stage');
+      if (this.stage < 5) {
+        nextBtn.classList.remove('hidden');
+        nextBtn.innerText = `Play Stage ${this.stage + 1} / 다음 스테이지(${this.stage + 1}관문) ▶`;
+      } else {
+        nextBtn.classList.add('hidden');
+      }
+
+      // 결과 화면에서는 방금 깬 스테이지 랭킹 탭을 기본 선택
+      this.activeRankTab = stKey;
+      this.syncTabButtons();
+
+      const statusEl = document.getElementById('save-status');
+      if (SCRIPT_URL.startsWith('http')) {
+        statusEl.innerText = "Saving score... / 랭킹에 점수 등록 중...";
+        try {
+          await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({
+              game: stKey,
+              nickname: nick,
+              score: this.totalScore
+            })
+          });
+          statusEl.innerText = "✅ Score Saved! / 랭킹 등록 완료!";
+          setTimeout(() => this.loadRankings(), 1200);
+        } catch (e) {
+          statusEl.innerText = "⚠️ Network error while saving. / 저장 지연";
+        }
+      } else {
+        statusEl.innerText = "Test Mode (Apps Script URL not set)";
+      }
+    },
+
+    playNextStage() {
+      if (this.stage < 5) this.openBridge(this.stage + 1);
+      else this.goHome();
+    },
+
+    goHome() {
+      this.clearLoops();
+      this.renderStageMenu();
+      this.activeRankTab = 'total';
+      this.syncTabButtons();
+      this.renderRankingTables();
+      this.showOnly('screen-intro');
+    },
+
+    switchRankTab(tabKey) {
+      this.activeRankTab = tabKey;
+      this.syncTabButtons();
+      this.renderRankingTables();
+    },
+
+    syncTabButtons() {
+      // 로비 탭 동기화
+      const lobbyBtns = document.querySelectorAll('#lobby-rank-tabs .rank-tab-btn');
+      const keys = ['total', 'stage1', 'stage2', 'stage3', 'stage4', 'stage5'];
+      lobbyBtns.forEach((btn, idx) => {
+        btn.classList.toggle('active', keys[idx] === this.activeRankTab);
+      });
+      // 결과 화면 탭 동기화
+      const resBtns = document.querySelectorAll('#result-rank-tabs .rank-tab-btn');
+      resBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === this.activeRankTab);
+      });
+    },
+
+    renderRankingTables() {
+      const list = this.rankingCache[this.activeRankTab] || [];
+      const html = !SCRIPT_URL.startsWith('http')
+        ? '<tr><td colspan="3" style="text-align:center; color:#94a3b8;">Set Apps Script URL to view live rankings.</td></tr>'
+        : !list.length
+          ? '<tr><td colspan="3" style="text-align:center; color:#94a3b8;">No records yet. Be the first! / 첫 기록에 도전하세요!</td></tr>'
+          : list.map((item, i) => `
+              <tr>
+                <td>${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '#' + (i + 1)}</td>
+                <td>${String(item.nickname).replace(/[<>&"']/g, '')}${item.clearedCount ? ` <span style="font-size:0.72rem; color:#94a3b8;">(${item.clearedCount}/5)</span>` : ''}</td>
+                <td>${item.score.toLocaleString()}</td>
+              </tr>
+            `).join('');
+
+      document.getElementById('lobby-rank-body').innerHTML = html;
+      document.getElementById('result-rank-body').innerHTML = html;
+    },
+
+    async loadRankings() {
+      if (!SCRIPT_URL.startsWith('http')) {
+        this.renderRankingTables();
+        return;
+      }
+      try {
+        const res = await fetch(SCRIPT_URL);
+        this.rankingCache = await res.json();
+        this.renderRankingTables();
+      } catch (e) {
+        const errHtml = '<tr><td colspan="3" style="text-align:center; color:#f87171;">Failed to load rankings.</td></tr>';
+        document.getElementById('lobby-rank-body').innerHTML = errHtml;
+        document.getElementById('result-rank-body').innerHTML = errHtml;
+      }
+    }
+  };
+
+  // 초기 화면 세팅
+  document.getElementById('nickname').value = localStorage.getItem('vip2026_nick') || '';
+  window.addEventListener('DOMContentLoaded', () => {
+    GameEngine.renderStageMenu();
+    GameEngine.loadRankings();
+  });
+</script>
+
+<!-- 기존 스테이지별 JS 파일 그대로 사용 -->
+<script src="./js/stage1_shaman.js"></script>
+<script src="./js/stage2_medicine.js"></script>
+<script src="./js/stage3_army.js"></script>
+<script src="./js/stage4_somaek.js"></script>
+<script src="./js/stage5_security.js"></script>
+</body>
+</html>
